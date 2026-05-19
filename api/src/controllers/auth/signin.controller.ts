@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 
+import * as jose from "jose";
 import { db } from "../../database/index.js";
 
 export const signInController: RequestHandler = async (req, res) => {
@@ -23,5 +24,16 @@ export const signInController: RequestHandler = async (req, res) => {
     return res.status(400).json({ message: "Invalid email or password" });
   }
 
-  res.json({ user });
+  const accessToken = await new jose.SignJWT({ userId: user.id })
+    .setProtectedHeader({ alg: "HS256" })
+    .sign(new TextEncoder().encode(process.env.JWT_SECRET));
+
+  res.json({
+    user: {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    },
+    accessToken,
+  });
 };
