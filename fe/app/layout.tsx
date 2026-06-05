@@ -39,7 +39,10 @@ export default function RootLayout({ children }: PropsWithChildren) {
         "bg-slate-100",
       )}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-slate-200"
+      >
         <AuthProvider>{children}</AuthProvider>
         <Toaster />
       </body>

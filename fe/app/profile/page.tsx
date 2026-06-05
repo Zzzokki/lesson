@@ -4,6 +4,7 @@ import { useAuth } from "../_components/providers/AuthProvider";
 
 const ProfilePage = () => {
   const { user } = useAuth();
+
   return (
     <div>
       Profile Page,

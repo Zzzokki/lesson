@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { ChangeEvent, useState } from "react";
 import { User } from "../page";
-import { toast } from "sonner";
 import { Loader } from "lucide-react";
 import { useAuth } from "./providers/AuthProvider";
 import { api } from "@/axios";
+import { handleError } from "@/utils/error";
 
 type SignUpResponse = {
   user: User;
@@ -48,13 +47,7 @@ export const SignUpCard = () => {
 
       setUser(data.user);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "An error occurred");
-      } else if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unknown error occurred");
-      }
+      handleError(error);
     } finally {
       setLoading(false);
     }

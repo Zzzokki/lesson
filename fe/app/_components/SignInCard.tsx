@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ChangeEvent, useState } from "react";
 import { User } from "../page";
-import { toast } from "sonner";
 import { useAuth } from "./providers/AuthProvider";
 import { api } from "@/axios";
-import axios from "axios";
+import { handleError } from "@/utils/error";
 
 type SignInResponse = {
   user: User;
@@ -40,13 +39,7 @@ export const SignInCard = () => {
       setUser(data.user);
       localStorage.setItem("accessToken", data.accessToken);
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        toast.error(error.response?.data?.message || "An error occurred");
-      } else if (error instanceof Error) {
-        toast.error(error.message);
-      } else {
-        toast.error("An unknown error occurred");
-      }
+      handleError(error);
     }
   };
 
