@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx --watch src/index.ts",
-    "drizzle:push": "drizzle-kit push"
+    "dpush": "drizzle-kit push",
+    "dpull": "drizzle-kit pull"
   },
   "keywords": [],
   "author": "",

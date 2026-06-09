@@ -36,8 +36,9 @@ export const SignInCard = () => {
         password,
       });
 
-      setUser(data.user);
       localStorage.setItem("accessToken", data.accessToken);
+
+      setUser(data.user);
     } catch (error) {
       handleError(error);
     }

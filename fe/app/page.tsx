@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { CreateIdeaDialog } from "./_components";
 import { handleError } from "@/utils/error";
 import { api } from "@/axios";
-import { Loader, Trash } from "lucide-react";
+import { ArrowDown, ArrowUp, Loader, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAuth } from "./_components/providers/AuthProvider";
 
 export type User = {
   id: number;
@@ -21,6 +22,8 @@ export type Idea = {
 };
 
 export default function Home() {
+  const { user } = useAuth();
+
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -56,7 +59,7 @@ export default function Home() {
   }, [refreshKey]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="w-200 mx-auto px-4 py-8">
       <div className="mb-8 flex items-center justify-between">
         <h1 className="text-2xl font-bold mb-4">Welcome to the Idea App</h1>
 
@@ -71,21 +74,46 @@ export default function Home() {
         )}
 
         {!loading &&
-          ideas.map((idea, index) => (
-            <div
-              key={idea.id}
-              className="p-4 rounded-lg bg-white shadow flex justify-between "
-            >
-              {index + 1}.{idea.text} user: {idea.userId}
-              <Button
-                onClick={() => {
-                  handleDelete(idea.id);
-                }}
+          ideas.map((idea, index) => {
+            const { id, text, userId } = idea;
+
+            const isMine = user?.id === userId;
+
+            const deleteIdea = () => handleDelete(id);
+
+            return (
+              <div
+                key={idea.id}
+                className="p-4 rounded-lg bg-white shadow flex justify-between "
               >
-                <Trash />
-              </Button>
-            </div>
-          ))}
+                <p>
+                  {index + 1}.{text}
+                </p>
+
+                <div className="flex gap-2">
+                  {isMine && (
+                    <Button
+                      size="icon-sm"
+                      variant="destructive"
+                      onClick={deleteIdea}
+                    >
+                      <Trash />
+                    </Button>
+                  )}
+
+                  <p>0</p>
+
+                  <Button size="icon-sm" variant="destructive">
+                    <ArrowDown />
+                  </Button>
+
+                  <Button size="icon-sm" variant="default">
+                    <ArrowUp />
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
       </div>
     </div>
   );

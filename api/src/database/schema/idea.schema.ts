@@ -6,6 +6,7 @@ export const ideas = pgTable("ideas", {
   id: serial("id").primaryKey(),
   text: text("text").notNull(),
   userId: serial("user_id").notNull(),
+  score: serial("score").default(0),
 });
 
 export const ideaRelations = relations(ideas, ({ one }) => ({
